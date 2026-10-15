@@ -3,7 +3,10 @@
  * DragFSM is a pure state machine (no DOM) so node can test it; attach() wires it to a canvas.
  *
  * States: 'idle' | 'pending' (cube grabbed, inside the dead zone) | 'dragging' (direction locked,
- * legal roll previewed) | 'blocked' (direction locked, roll illegal) | 'panning'.
+ * legal roll previewed) | 'blocked' (direction locked, roll illegal).
+ *
+ * The view has no pan or zoom, so a drag always means a cube: the board keeps the swarm in view by
+ * itself (CubeRender.Board), and a press on empty space is left alone.
  *
  * A drag of one cell is one full move (90 or 180 degrees alike): p = clamp(along / cellPx, 0, 1).
  * One gesture moves a cube by at most one step: while held, p clamps at 1 (the preview holds the
@@ -30,7 +33,7 @@
   /**
    * env: {hitTest(px,py)->id|null, cellPx()->number, roll(id,dir)->rollMove result,
    *       preview(id,move,p) (preview(null,null,0) clears), commit(id,move,fromP,animate),
-   *       springBack(id,move,fromP), blocked(id,fail,dir), unblocked(), panBy(dx,dy), snap()}
+   *       springBack(id,move,fromP), blocked(id,fail,dir), unblocked(), snap()}
    */
   function DragFSM(env) {
     this.env = env;
@@ -45,20 +48,20 @@
     this.fail = null;        // rollMove failure while blocked
     this.p = 0;              // preview progress, clamped to [0, 1]
     this.ox = 0; this.oy = 0;  // gesture origin (pointer-down position)
-    this.lx = 0; this.ly = 0;  // last pan position
   };
 
   DragFSM.prototype.deadZone = function () { return Math.max(6, 0.12 * this.env.cellPx()); };
 
-  /** Pointer down.  button: 0 left, 1 middle, 2 right.  Returns true if the FSM took the pointer. */
-  DragFSM.prototype.down = function (px, py, button, opts) {
+  /**
+   * Pointer down.  button: 0 left, 1 middle, 2 right.  Returns true if the FSM took the pointer,
+   * which it does only for a left press on a cube.
+   */
+  DragFSM.prototype.down = function (px, py, button) {
     if (this.state !== 'idle') return false;
     this._clear();
-    var space = !!(opts && opts.space);
-    if (button === 1 || (button === 0 && space)) return this._pan(px, py);
     if (button !== 0) return false;
     var id = this.env.hitTest(px, py);
-    if (id === null || id === undefined) return this._pan(px, py);
+    if (id === null || id === undefined) return false;
     if (this.env.snap) this.env.snap();
     this.state = 'pending';
     this.id = id;
@@ -66,20 +69,8 @@
     return true;
   };
 
-  DragFSM.prototype._pan = function (px, py) {
-    this.state = 'panning';
-    this.lx = px; this.ly = py;
-    return true;
-  };
-
   DragFSM.prototype.move = function (px, py) {
     if (this.state === 'idle') return;
-    if (this.state === 'panning') {
-      var dx = px - this.lx, dy = py - this.ly;
-      this.lx = px; this.ly = py;
-      if (dx || dy) this.env.panBy(dx, dy);
-      return;
-    }
     this._track(px, py);
   };
 
@@ -276,7 +267,7 @@
 
   var TEXT_INPUTS = {text: 1, search: 1, number: 1, email: 1, url: 1, password: 1, tel: 1};
 
-  /** Text entry has focus: leave Space (and other keys) alone.  Checkboxes/buttons don't count. */
+  /** Text entry has focus: leave the keys alone.  Checkboxes/buttons don't count. */
   function isTyping(t) {
     if (!t || !t.tagName) return false;
     var tag = t.tagName.toLowerCase();
@@ -285,7 +276,7 @@
   }
 
   /**
-   * Wire pointer, wheel and key events of `canvas` to `board` (a CubeRender.Board).
+   * Wire pointer and key events of `canvas` to `board` (a CubeRender.Board).
    * handlers: {commit(id, move, fromP, animate), onBlocked(fail, id, dir), onUnblocked(), onHover(id)}.
    * handlers.commit must apply the move to the game; afterwards attach animates the rest of the
    * pivot (if the handler did not start an animation itself) and calls board.refresh().
@@ -295,7 +286,7 @@
    */
   function attach(canvas, board, handlers) {
     handlers = handlers || {};
-    var win = root, doc = root.document, Rules = root.CubeRules;
+    var win = root, Rules = root.CubeRules;
     // A move is committed only if it is still exactly what rolling that cube would do now (the app
     // may have undone / reset under a held drag).
     function stillLegal(id, move) {
@@ -333,18 +324,17 @@
         board.releaseBlocked();
         if (handlers.onUnblocked) handlers.onUnblocked();
       },
-      panBy: function (dx, dy) { board.panBy(dx, dy); },
       snap: function () { board.snapAnimations(); },
       keyTarget: function (id) { board.setKeyTarget(id); },
     };
     var fsm = new DragFSM(env);
     var keys = new KeyControl(env);
-    var active = null, space = false, spaceEaten = false, inside = false, hoverId = null, downGame = null;
+    var active = null, hoverId = null, downGame = null;
     var keyGame = board.game;
 
     /** The app swapped in a new game mid-gesture: drop the gesture quietly. */
     function stale() {
-      if (fsm.state === 'idle' || fsm.state === 'panning' || board.game === downGame) return false;
+      if (fsm.state === 'idle' || board.game === downGame) return false;
       fsm.abort();
       board.preview(null);
       board.releaseBlocked();
@@ -358,7 +348,7 @@
     function cursor() {
       var st = fsm.state, c = '';
       if (st !== 'idle') c = 'grabbing';
-      else if (space || hoverId !== null) c = 'grab';
+      else if (hoverId !== null) c = 'grab';
       canvas.style.cursor = c;
     }
     function hover(id) {
@@ -379,10 +369,9 @@
 
     function onDown(e) {
       if (active !== null) return;
-      if (e.button === 1) e.preventDefault();
       var pt = local(e);
       keys.reset();
-      if (!fsm.down(pt[0], pt[1], e.button, {space: space})) return;
+      if (!fsm.down(pt[0], pt[1], e.button)) return;
       e.preventDefault();
       active = e.pointerId;
       downGame = board.game;
@@ -392,7 +381,6 @@
     }
     function onMove(e) {
       var pt = local(e);
-      inside = true;
       keys.pointer(pt[0], pt[1]);
       if (active !== null) {
         if (e.pointerId !== active) return;
@@ -401,7 +389,7 @@
         return;
       }
       if (e.pointerType === 'touch') return;
-      hover(space ? null : board.cubeAt(pt[0], pt[1]));
+      hover(board.cubeAt(pt[0], pt[1]));
       cursor();
     }
     function onUp(e) {
@@ -410,27 +398,15 @@
       active = null;
       if (!stale()) fsm.up(pt[0], pt[1]);
       release(e);
-      if (e.pointerType !== 'touch' && !space) hover(board.cubeAt(pt[0], pt[1]));
+      if (e.pointerType !== 'touch') hover(board.cubeAt(pt[0], pt[1]));
       cursor();
     }
     function onCancel(e) {
       if (active === null || e.pointerId !== active) return;
       cancel();
     }
-    function onEnter(e) { inside = true; var pt = local(e); keys.pointer(pt[0], pt[1]); }
-    function onLeave() { inside = false; keys.leave(); if (active === null) { hover(null); cursor(); } }
-    function onWheel(e) {
-      e.preventDefault();
-      var dy = e.deltaY;
-      if (e.deltaMode === 1) dy *= 16;
-      else if (e.deltaMode === 2) dy *= canvas.clientHeight || 800;
-      var f = Math.exp(-dy * (e.ctrlKey ? 0.01 : 0.0015));
-      f = Math.max(0.5, Math.min(2, f));
-      var pt = local(e);
-      board.zoomAt(pt[0], pt[1], f);
-    }
-    function onMouseDown(e) { if (e.button === 1) e.preventDefault(); }   // autoscroll
-    function onAux(e) { if (e.button === 1) e.preventDefault(); }         // X11 paste
+    function onEnter(e) { var pt = local(e); keys.pointer(pt[0], pt[1]); }
+    function onLeave() { keys.leave(); if (active === null) { hover(null); cursor(); } }
     function onMenu(e) { e.preventDefault(); }
     function onKeyDown(e) {
       if (!e.defaultPrevented && !isTyping(e.target) && fsm.state === 'idle' && active === null && keyDir(e)) {
@@ -443,36 +419,16 @@
       }
       if (e.key === 'Escape' || e.key === 'Esc') {
         if (fsm.state !== 'idle') cancel();
-        return;
-      }
-      if ((e.code === 'Space' || e.key === ' ') && !isTyping(e.target)) {
-        var t = e.target;
-        // Over the board, Space means "pan": keep it from scrolling the page or pressing / toggling
-        // a focused button or checkbox.  Elsewhere a focused control keeps its Space.
-        if (inside || active !== null || !t || t === doc.body || t === doc.documentElement || t === canvas) {
-          e.preventDefault();
-          spaceEaten = true;
-          if (!space) { space = true; hover(null); cursor(); }
-        }
       }
     }
-    function onKeyUp(e) {
-      if (e.code === 'Space' || e.key === ' ') {
-        if (spaceEaten) e.preventDefault();
-        spaceEaten = false;
-        space = false;
-        cursor();
-      }
-    }
-    function onBlur() { space = false; spaceEaten = false; keys.reset(); cancel(); }
+    function onBlur() { keys.reset(); cancel(); }
 
     canvas.style.touchAction = 'none';
     var L = [
       [canvas, 'pointerdown', onDown], [canvas, 'pointermove', onMove], [canvas, 'pointerup', onUp],
       [canvas, 'pointercancel', onCancel], [canvas, 'lostpointercapture', onCancel],
-      [canvas, 'pointerenter', onEnter], [canvas, 'pointerleave', onLeave], [canvas, 'wheel', onWheel, {passive: false}],
-      [canvas, 'mousedown', onMouseDown], [canvas, 'auxclick', onAux], [canvas, 'contextmenu', onMenu],
-      [win, 'keydown', onKeyDown], [win, 'keyup', onKeyUp], [win, 'blur', onBlur],
+      [canvas, 'pointerenter', onEnter], [canvas, 'pointerleave', onLeave], [canvas, 'contextmenu', onMenu],
+      [win, 'keydown', onKeyDown], [win, 'blur', onBlur],
     ];
     L.forEach(function (l) { l[0].addEventListener(l[1], l[2], l[3] || false); });
 

@@ -36,7 +36,9 @@
   // Cube geometry (cell units).
   var HALF = 0.44;             // inset 0.06
   var RAD = 0.17;              // corner radius
-  var S_MIN = 10, S_MAX = 140, FIT_MAX = 88;
+  var S_MIN = 10, FIT_MAX = 88;
+  var FIT_PAD = 1.6;           // cells of room around the framed cubes
+  var VIEW_MARGIN = 0.5;       // a cube closer than this to the edge brings the view after it
   // Dashes in world units, sized so each side+corner of the rounded square holds exactly four
   // periods and a dash sits centred on every corner: the outline looks the same on every cell.
   var PERIM_UNIT = 2 * (HALF - RAD) + Math.PI * RAD / 2;
@@ -163,7 +165,6 @@
     this._confetti = [];
     this._confT = 0;
     this._camAnim = null;     // {from, to, t0, dur}
-    this._userCam = false;    // true once the player pans/zooms: resizes then keep the view
     this._raf = 0;
     this._dirty = false;
     var self = this;
@@ -202,6 +203,7 @@
       if (this._camAnim) { assign(this.camera, this._camAnim.to); this._camAnim = null; }
       if (this._blk) { this._blk.wobble = false; if (this._blk.rel != null) this._blk = null; }
     }
+    this._keepInView();   // the ghost may just have been switched on
     this.render();
   };
 
@@ -239,6 +241,7 @@
     if (!this.game) return;
     this._align();
     this._emit();
+    this._keepInView();
     this._invalidate();
   };
 
@@ -251,9 +254,8 @@
       var bw = Math.max(1, Math.round(W * dpr)), bh = Math.max(1, Math.round(H * dpr));
       if (this.canvas.width !== bw) this.canvas.width = bw;
       if (this.canvas.height !== bh) this.canvas.height = bh;
-      var first = !this.W;
       this.W = W; this.H = H; this.dpr = dpr;
-      if (this.game && (first || !this._userCam) && !this._camAnim) this.fit(false);
+      if (this.game && !this._camAnim) this.fit(false);
     }
     this.render();
   };
@@ -268,28 +270,11 @@
     return [c.cx + (px - this.W / 2) / c.s, c.cy - (py - this.H / 2) / c.s];
   };
 
-  Board.prototype.panBy = function (dx, dy) {
-    this._camAnim = null;
-    this.camera.cx -= dx / this.camera.s;
-    this.camera.cy += dy / this.camera.s;
-    this._userCam = true;
-    this._invalidate();
-  };
+  // The player has no pan or zoom: the view frames the swarm (fit) and follows it when it nears an
+  // edge (_keepInView, after every change).
 
-  Board.prototype.zoomAt = function (px, py, factor) {
-    this._camAnim = null;
-    var w = this.toWorld(px, py), c = this.camera;
-    c.s = clamp(c.s * factor, S_MIN, S_MAX);
-    c.cx = w[0] - (px - this.W / 2) / c.s;
-    c.cy = w[1] + (py - this.H / 2) / c.s;
-    this._userCam = true;
-    this._invalidate();
-  };
-
-  /** Frame the current cubes and the target ghost. */
-  Board.prototype.fit = function (animate) {
-    this._userCam = false;
-    if (!this.game) return;
+  /** World box [x0, y0, x1, y1] of the cubes and, when shown, the target ghost. */
+  Board.prototype._extent = function () {
     var cells = this.game.cells();
     if (this.options.ghost && this.alignment) {
       var t = this.alignment.t;
@@ -299,7 +284,13 @@
     cells.forEach(function (c) {
       x0 = Math.min(x0, c[0]); y0 = Math.min(y0, c[1]); x1 = Math.max(x1, c[0] + 1); y1 = Math.max(y1, c[1] + 1);
     });
-    var pad = 1.6;
+    return [x0, y0, x1, y1];
+  };
+
+  /** Frame the current cubes and the target ghost. */
+  Board.prototype.fit = function (animate) {
+    if (!this.game) return;
+    var b = this._extent(), x0 = b[0], y0 = b[1], x1 = b[2], y1 = b[3], pad = FIT_PAD;
     var to = {cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, s: this.camera.s};
     if (this.W > 0 && this.H > 0) {
       to.s = clamp(Math.min(this.W / (x1 - x0 + 2 * pad), this.H / (y1 - y0 + 2 * pad)), S_MIN, FIT_MAX);
@@ -311,6 +302,14 @@
       assign(this.camera, to);
     }
     this._invalidate();
+  };
+
+  /** Frame everything again (animated) if a cube or the ghost is within VIEW_MARGIN of an edge. */
+  Board.prototype._keepInView = function () {
+    if (!this.game || !(this.W > 0 && this.H > 0)) return;
+    var b = this._extent(), c = this._camAnim ? this._camAnim.to : this.camera;
+    var hw = this.W / (2 * c.s) - VIEW_MARGIN, hh = this.H / (2 * c.s) - VIEW_MARGIN;
+    if (b[0] < c.cx - hw || b[2] > c.cx + hw || b[1] < c.cy - hh || b[3] > c.cy + hh) this.fit(true);
   };
 
   Board.prototype.cellAt = function (px, py) {

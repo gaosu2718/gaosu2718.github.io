@@ -10,7 +10,7 @@ default), and the same controls.
 ## Layout
 
 ```
-index.html                    Home: profile, about, news, publications (short), demos, education, contact
+index.html                    Home: profile, news, about, publications (short), demos, education, contact
 research/index.html           Projects in detail, publications with abstracts and BibTeX, talks
 teaching-service/index.html   Teaching, service and leadership
 demos/index.html              One card per demo
@@ -32,17 +32,22 @@ assets/
 
 ## Page structure
 
-Every page has the same **left bar**. It holds the profile, the page links, and the display settings
-(theme: Auto, Light or Dark; colours), folded under a summary. It is a sticky side panel from 1000px
-wide.
+Every page except a demo has the same **left bar**. It holds the profile, the page links, and the
+display settings (theme: Auto, Light or Dark; colours), folded under a summary. It is a sticky side
+panel from 1000px wide.
 
 Below that width, a **top header** takes over. On tablets it shows the page links inline, and on
 phones they sit behind a menu button, in a drop-down that also holds the display settings. The
 profile then shows as a card on the home page only.
 
+A **demo page** (`demos/pivot-cubes/`) has no left bar, so the game gets the whole width
+(`<div class="page wide">`). From 1000px, the breadcrumbs above the game lead back to the site, and
+the game's own panel sets the theme. Below 1000px it has the same header as every other page.
+
 The bar and the header are repeated in each file. Only the `../` prefix of the links and the
 `aria-current="page"` marker change. **A new page needs a link in every file, in all three lists:**
-`.side-nav`, `.sh-nav` and `.pop-nav`. Add the page to `sitemap.xml` too.
+`.side-nav`, `.sh-nav` and `.pop-nav` (a demo page has only the last two). Add the page to
+`sitemap.xml` too.
 
 The page background is plain. Earlier background options (Perlin terrain and a fractal pattern) are
 archived outside this repository, in `~/homepage/archive/background/`, with notes on how to bring

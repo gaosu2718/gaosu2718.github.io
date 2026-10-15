@@ -140,7 +140,7 @@
   --gap: 16px;
   --side-w: 296px;
   --wide: 1140px;       /* the page: left bar and main column */
-  --wider: 1640px;      /* a demo page, so the game gets room for its own three columns */
+  --wider: 1640px;      /* a demo page: no left bar, so the game gets room for its own three columns */
   --header-h: 60px;     /* the top header, shown only below 1000px */
   --radius: 14px;
   --radius-sm: 9px;
@@ -152,7 +152,8 @@
 @media (max-width: 759.98px) {
   :root { --header-h: 54px; }
 }
-/* From 1000px the left bar holds the page links and display settings, so there is no top header. */
+/* From 1000px the left bar holds the page links and display settings, so there is no top header.
+ * (A demo page has neither: the breadcrumbs above the game lead back to the site.) */
 @media (min-width: 1000px) {
   :root { --header-h: 0px; }
   .site-header { display: none; }
@@ -505,7 +506,8 @@ html:not(.js) .sh-tools { display: none; }
     align-items: start;
     max-width: var(--wide);
   }
-  .page.wide { max-width: var(--wider); }
+  /* a demo page: no left bar, the game takes the whole width */
+  .page.wide { grid-template-columns: minmax(0, 1fr); max-width: var(--wider); }
   .side {
     position: sticky;
     top: calc(var(--header-h) + var(--pad));
@@ -647,6 +649,11 @@ html:not(.js) .side-display { display: none !important; }
   .role { font-size: 14px; }
   .actions { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 14px; }
   .actions .btn { justify-content: center; }
+}
+/* on phones the photo and the Chinese name sit to the right of the name and roles */
+@media (max-width: 759.98px) {
+  .profile { grid-template-columns: minmax(0, 1fr) auto; }
+  .portrait { order: 1; }
 }
 @media (max-width: 520px) {
   .actions { grid-template-columns: 1fr 1fr; }
