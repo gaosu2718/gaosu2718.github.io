@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Demos · Suyi (Stanley) Gao</title>
+<meta name="description" content="Interactive demos by Suyi (Stanley) Gao that run in the browser, including Pivot Cubes, a puzzle about reshaping a swarm of squares one pivot at a time.">
+<meta name="author" content="Suyi Gao">
+<link rel="canonical" href="https://gaosu2718.github.io/demos/">
+<meta name="theme-color" content="#f2f1ed" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121419" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Demos · Suyi (Stanley) Gao">
+<meta property="og:description" content="Interactive demos that run in the browser.">
+<meta property="og:url" content="https://gaosu2718.github.io/demos/">
+<meta property="og:image" content="https://gaosu2718.github.io/assets/img/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='2' width='36' height='36' rx='9' fill='%230b8263'/%3E%3Ctext x='20' y='26.6' font-family='system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif' font-size='17' font-weight='700' fill='%23fff' text-anchor='middle'%3ESG%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script>
+  /* Apply the saved theme and colour before the first paint, so a dark page never flashes light. */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    try {
+      var t = localStorage.getItem('homepage.theme');
+      if (t === 'light' || t === 'dark') d.setAttribute('data-theme', t);
+      var p = localStorage.getItem('homepage.palette');
+      if (p && /^[a-z]+$/.test(p)) d.setAttribute('data-palette', p);
+    } catch (e) {}
+  })();
+</script>
+<script defer src="../assets/js/site.js"></script>
+</head>
+<body>
+
+<!-- Icons (Lucide-style strokes, as in Pivot Cubes); use with <svg><use href="#i-name"/></svg> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3.5v17a.5.5 0 0 0 .77.42l13.2-8.5a.5.5 0 0 0 0-.84L6.77 3.08A.5.5 0 0 0 6 3.5z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+  <symbol id="i-cubes" viewBox="0 0 24 24"><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/><rect x="8" y="3" width="8" height="8" rx="2" transform="rotate(25 12 7)"/></symbol>
+</svg>
+
+<!-- ===== Site header: below 1000px wide, in place of the left bar.  The same on every page
+     (only the ../ prefix and aria-current change). ===== -->
+<header class="site-header">
+  <div class="sh-inner">
+    <a class="sh-brand" href="../"><span class="sh-mark" aria-hidden="true">SG</span><span class="sh-name">Suyi Gao <span class="aka">(Stanley)</span></span></a>
+    <nav class="sh-nav" aria-label="Site">
+      <a href="../">Home</a>
+      <a href="../research/">Research</a>
+      <a href="../teaching-service/">Teaching &amp; Service</a>
+      <a href="../demos/" aria-current="page">Demos</a>
+      <a href="../assets/files/Suyi_Gao_CV.pdf">CV</a>
+    </nav>
+    <div class="sh-tools">
+      <button type="button" class="sh-btn sh-display-btn" data-pop aria-controls="site-pop" aria-expanded="false" aria-label="Theme and colors" title="Theme and colors"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path class="fill" d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></svg></button>
+      <button type="button" class="sh-btn sh-menu-btn" data-pop aria-controls="site-pop" aria-expanded="false" aria-label="Menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+    <div class="sh-pop" id="site-pop" hidden>
+      <nav class="pop-nav" aria-label="Site menu">
+        <a href="../">Home</a>
+        <a href="../research/">Research</a>
+        <a href="../teaching-service/">Teaching &amp; Service</a>
+        <a href="../demos/" aria-current="page">Demos</a>
+        <a href="../assets/files/Suyi_Gao_CV.pdf">CV (PDF)<svg class="ico" aria-hidden="true"><use href="#i-file"/></svg></a>
+      </nav>
+      <div class="pop-display">
+        <h2>Display</h2>
+        <div class="seg" role="radiogroup" aria-label="Theme">
+          <label><input type="radio" name="theme" value="auto" data-theme-opt checked><span>Auto</span></label>
+          <label><input type="radio" name="theme" value="light" data-theme-opt><span>Light</span></label>
+          <label><input type="radio" name="theme" value="dark" data-theme-opt><span>Dark</span></label>
+        </div>
+        <div class="field-row"><span>Colors</span><span class="palette-name">Mint</span></div>
+        <div class="swatches" role="radiogroup" aria-label="Colors"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ===== Left bar: from 1000px wide, a sticky side panel.  The same on every page (only the ../
+       prefix and aria-current change).  Below 1000px the profile shows as a card on the home page
+       only, and the page links and display settings move to the header. ===== -->
+  <aside class="side panel" aria-label="Profile and site navigation">
+    <div class="profile">
+      <div class="portrait">
+        <img class="photo" src="../assets/img/profile.jpg" width="426" height="426" alt="Portrait of Suyi (Stanley) Gao">
+        <span class="cname" lang="zh-Hans" title="Gāo Sūyì">高苏熠</span>
+      </div>
+      <div class="who">
+        <p class="name">Suyi Gao <span class="aka">(Stanley)</span></p>
+        <p class="role">Ph.D. student in Applied Mathematics</p>
+        <p class="role">Purdue University</p>
+        <p class="role dim">Advisor: <a href="https://sites.google.com/view/rongjielai/">Prof. Rongjie Lai</a></p>
+        <p class="role dim where"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>West Lafayette, IN</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="mailto:gao757@purdue.edu"><svg aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
+      <a class="btn btn-primary" href="../assets/files/Suyi_Gao_CV.pdf"><svg aria-hidden="true"><use href="#i-file"/></svg>CV</a>
+      <a class="btn" href="https://www.linkedin.com/in/gaosu2718/"><svg aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+      <a class="btn" href="https://github.com/gaosu2718"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+      <!-- When you have them, add more in the same form, e.g.
+      <a class="btn" href="https://scholar.google.com/citations?user=YOUR_ID"><svg aria-hidden="true"><use href="#i-out"/></svg>Scholar</a>
+      <a class="btn" href="https://orcid.org/0000-0000-0000-0000"><svg aria-hidden="true"><use href="#i-out"/></svg>ORCID</a> -->
+    </div>
+
+    <nav class="group side-nav" aria-label="Pages">
+      <h2>Pages</h2>
+      <ul>
+        <li><a href="../"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>Home</a></li>
+        <li><a href="../research/"><svg class="ico" aria-hidden="true"><use href="#i-book"/></svg>Research</a></li>
+        <li><a href="../teaching-service/"><svg class="ico" aria-hidden="true"><use href="#i-cap"/></svg>Teaching &amp; Service</a></li>
+        <li><a href="../demos/" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#i-cubes"/></svg>Demos</a></li>
+      </ul>
+    </nav>
+
+    <!-- Display settings: folded away by default; the summary shows the current choices -->
+    <details class="group side-display">
+      <summary><span class="sum-label">Display</span><span class="sum-value" data-display-summary>Auto · Mint</span><svg class="ico chev" aria-hidden="true"><use href="#i-down"/></svg></summary>
+      <div class="display-body">
+        <div class="seg" role="radiogroup" aria-label="Theme">
+          <label><input type="radio" name="theme-side" value="auto" data-theme-opt checked><span>Auto</span></label>
+          <label><input type="radio" name="theme-side" value="light" data-theme-opt><span>Light</span></label>
+          <label><input type="radio" name="theme-side" value="dark" data-theme-opt><span>Dark</span></label>
+        </div>
+        <div class="field-row"><span>Colors</span><span class="palette-name">Mint</span></div>
+        <div class="swatches" role="radiogroup" aria-label="Colors"></div>
+      </div>
+    </details>
+  </aside>
+
+  <main class="main">
+
+    <section class="panel page-head" aria-labelledby="h-page">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a><span class="sep" aria-hidden="true">/</span><span>Demos</span></nav>
+      <h1 id="h-page">Demos</h1>
+      <p class="lead">Small interactive pieces that run in your browser, on a phone or a desktop.
+        Nothing to install: open one and play.</p>
+    </section>
+
+    <!-- ===== One card per demo; each demo has its own folder and page ===== -->
+    <section class="panel section" aria-label="Pivot Cubes">
+      <div class="demo-card">
+        <a class="demo-board" href="pivot-cubes/" tabindex="-1" aria-hidden="true">
+          <svg class="logo" viewBox="0 0 40 40">
+            <rect class="logo-ghost" x="20.6" y="8.6" width="13.8" height="13.8" rx="3.4"/>
+            <rect class="logo-on" x="5.6" y="23.6" width="13.8" height="13.8" rx="3.4"/>
+            <rect class="logo-on" x="20.6" y="23.6" width="13.8" height="13.8" rx="3.4"/>
+            <rect class="logo-off" x="5.6" y="8.6" width="13.8" height="13.8" rx="3.4" transform="rotate(32 20 23)"/>
+            <circle class="logo-hinge" cx="20" cy="23" r="1.7"/>
+          </svg>
+        </a>
+        <div>
+          <h2 class="demo-title"><a href="pivot-cubes/">Pivot Cubes</a></h2>
+          <p>A browser puzzle: reshape a swarm of squares, one pivot at a time, until it matches the
+            target shape. Ten to fifty cubes; targets include random shapes, MNIST digits and Vicsek
+            fractals.</p>
+          <div class="meta"><span class="badge quiet">Puzzle</span><span>Mouse, keyboard or touch</span></div>
+          <a class="btn btn-primary" href="pivot-cubes/"><svg class="solid" aria-hidden="true"><use href="#i-play"/></svg>Play</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span>© 2026 Suyi (Stanley) Gao</span>
+      <span>Last updated October 2026</span>
+    </footer>
+  </main>
+</div>
+</body>
+</html>

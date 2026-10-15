@@ -1,0 +1,31 @@
+/* Touches for Pivot Cubes when it runs inside this site (demo.js links this file into the game's
+ * frame; play/ itself stays an unmodified copy of ~/cubes/game).
+ *
+ * The page sizes the frame to the game, so the frame itself never needs to scroll.  Without this,
+ * a classic scrollbar can appear in it and take a strip of the width. */
+html { overflow: hidden; }
+
+/* Below about 560px the game's step counter ("Steps · par · Matched") and the puzzle description
+ * ("Easy · two-way scramble …") share one row and overlap.  Give each its own row. */
+@media (max-width: 559.98px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "brand"
+      "hud"
+      "meta"
+      "stage"
+      "side"
+      "settings";
+  }
+  .meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 0 10px;
+    margin-top: -4px;
+    padding: 0 2px;
+    text-align: left;
+  }
+}

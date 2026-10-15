@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Research · Suyi (Stanley) Gao</title>
+<meta name="description" content="Research of Suyi (Stanley) Gao: in-context operator learning for stochastic mean-field control, neural operators for spacecraft swarms, diffusion models for geometry problems, and analysis on fractals. Papers, abstracts, BibTeX and talks.">
+<meta name="author" content="Suyi Gao">
+<link rel="canonical" href="https://gaosu2718.github.io/research/">
+<meta name="theme-color" content="#f2f1ed" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121419" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Research · Suyi (Stanley) Gao">
+<meta property="og:description" content="Operator learning for mean-field control and spacecraft swarms, diffusion models for geometry, analysis on fractals.">
+<meta property="og:url" content="https://gaosu2718.github.io/research/">
+<meta property="og:image" content="https://gaosu2718.github.io/assets/img/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='2' width='36' height='36' rx='9' fill='%230b8263'/%3E%3Ctext x='20' y='26.6' font-family='system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif' font-size='17' font-weight='700' fill='%23fff' text-anchor='middle'%3ESG%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/css/style.css">
+<script>
+  /* Apply the saved theme and colour before the first paint, so a dark page never flashes light. */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    try {
+      var t = localStorage.getItem('homepage.theme');
+      if (t === 'light' || t === 'dark') d.setAttribute('data-theme', t);
+      var p = localStorage.getItem('homepage.palette');
+      if (p && /^[a-z]+$/.test(p)) d.setAttribute('data-palette', p);
+    } catch (e) {}
+  })();
+</script>
+<script defer src="../assets/js/site.js"></script>
+</head>
+<body>
+
+<!-- Icons (Lucide-style strokes, as in Pivot Cubes); use with <svg><use href="#i-name"/></svg> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+  <symbol id="i-hash" viewBox="0 0 24 24"><path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3 8 21"/><path d="M16 3l-2 18"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 5-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+  <symbol id="i-cubes" viewBox="0 0 24 24"><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/><rect x="8" y="3" width="8" height="8" rx="2" transform="rotate(25 12 7)"/></symbol>
+</svg>
+
+<!-- ===== Site header: below 1000px wide, in place of the left bar.  The same on every page
+     (only the ../ prefix and aria-current change). ===== -->
+<header class="site-header">
+  <div class="sh-inner">
+    <a class="sh-brand" href="../"><span class="sh-mark" aria-hidden="true">SG</span><span class="sh-name">Suyi Gao <span class="aka">(Stanley)</span></span></a>
+    <nav class="sh-nav" aria-label="Site">
+      <a href="../">Home</a>
+      <a href="../research/" aria-current="page">Research</a>
+      <a href="../teaching-service/">Teaching &amp; Service</a>
+      <a href="../demos/">Demos</a>
+      <a href="../assets/files/Suyi_Gao_CV.pdf">CV</a>
+    </nav>
+    <div class="sh-tools">
+      <button type="button" class="sh-btn sh-display-btn" data-pop aria-controls="site-pop" aria-expanded="false" aria-label="Theme and colors" title="Theme and colors"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path class="fill" d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></svg></button>
+      <button type="button" class="sh-btn sh-menu-btn" data-pop aria-controls="site-pop" aria-expanded="false" aria-label="Menu" title="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+    <div class="sh-pop" id="site-pop" hidden>
+      <nav class="pop-nav" aria-label="Site menu">
+        <a href="../">Home</a>
+        <a href="../research/" aria-current="page">Research</a>
+        <a href="../teaching-service/">Teaching &amp; Service</a>
+        <a href="../demos/">Demos</a>
+        <a href="../assets/files/Suyi_Gao_CV.pdf">CV (PDF)<svg class="ico" aria-hidden="true"><use href="#i-file"/></svg></a>
+      </nav>
+      <div class="pop-display">
+        <h2>Display</h2>
+        <div class="seg" role="radiogroup" aria-label="Theme">
+          <label><input type="radio" name="theme" value="auto" data-theme-opt checked><span>Auto</span></label>
+          <label><input type="radio" name="theme" value="light" data-theme-opt><span>Light</span></label>
+          <label><input type="radio" name="theme" value="dark" data-theme-opt><span>Dark</span></label>
+        </div>
+        <div class="field-row"><span>Colors</span><span class="palette-name">Mint</span></div>
+        <div class="swatches" role="radiogroup" aria-label="Colors"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ===== Left bar: from 1000px wide, a sticky side panel.  The same on every page (only the ../
+       prefix and aria-current change).  Below 1000px the profile shows as a card on the home page
+       only, and the page links and display settings move to the header. ===== -->
+  <aside class="side panel" aria-label="Profile and site navigation">
+    <div class="profile">
+      <div class="portrait">
+        <img class="photo" src="../assets/img/profile.jpg" width="426" height="426" alt="Portrait of Suyi (Stanley) Gao">
+        <span class="cname" lang="zh-Hans" title="Gāo Sūyì">高苏熠</span>
+      </div>
+      <div class="who">
+        <p class="name">Suyi Gao <span class="aka">(Stanley)</span></p>
+        <p class="role">Ph.D. student in Applied Mathematics</p>
+        <p class="role">Purdue University</p>
+        <p class="role dim">Advisor: <a href="https://sites.google.com/view/rongjielai/">Prof. Rongjie Lai</a></p>
+        <p class="role dim where"><svg class="ico" aria-hidden="true"><use href="#i-pin"/></svg>West Lafayette, IN</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="mailto:gao757@purdue.edu"><svg aria-hidden="true"><use href="#i-mail"/></svg>Email</a>
+      <a class="btn btn-primary" href="../assets/files/Suyi_Gao_CV.pdf"><svg aria-hidden="true"><use href="#i-file"/></svg>CV</a>
+      <a class="btn" href="https://www.linkedin.com/in/gaosu2718/"><svg aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+      <a class="btn" href="https://github.com/gaosu2718"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+      <!-- When you have them, add more in the same form, e.g.
+      <a class="btn" href="https://scholar.google.com/citations?user=YOUR_ID"><svg aria-hidden="true"><use href="#i-out"/></svg>Scholar</a>
+      <a class="btn" href="https://orcid.org/0000-0000-0000-0000"><svg aria-hidden="true"><use href="#i-out"/></svg>ORCID</a> -->
+    </div>
+
+    <nav class="group side-nav" aria-label="Pages">
+      <h2>Pages</h2>
+      <ul>
+        <li><a href="../"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>Home</a></li>
+        <li><a href="../research/" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#i-book"/></svg>Research</a></li>
+        <li><a href="../teaching-service/"><svg class="ico" aria-hidden="true"><use href="#i-cap"/></svg>Teaching &amp; Service</a></li>
+        <li><a href="../demos/"><svg class="ico" aria-hidden="true"><use href="#i-cubes"/></svg>Demos</a></li>
+      </ul>
+    </nav>
+
+    <!-- Display settings: folded away by default; the summary shows the current choices -->
+    <details class="group side-display">
+      <summary><span class="sum-label">Display</span><span class="sum-value" data-display-summary>Auto · Mint</span><svg class="ico chev" aria-hidden="true"><use href="#i-down"/></svg></summary>
+      <div class="display-body">
+        <div class="seg" role="radiogroup" aria-label="Theme">
+          <label><input type="radio" name="theme-side" value="auto" data-theme-opt checked><span>Auto</span></label>
+          <label><input type="radio" name="theme-side" value="light" data-theme-opt><span>Light</span></label>
+          <label><input type="radio" name="theme-side" value="dark" data-theme-opt><span>Dark</span></label>
+        </div>
+        <div class="field-row"><span>Colors</span><span class="palette-name">Mint</span></div>
+        <div class="swatches" role="radiogroup" aria-label="Colors"></div>
+      </div>
+    </details>
+  </aside>
+
+  <main class="main">
+
+    <section class="panel page-head" aria-labelledby="h-page">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a><span class="sep" aria-hidden="true">/</span><span>Research</span></nav>
+      <h1 id="h-page">Research</h1>
+      <p class="lead">I build neural networks that learn <em>solution operators</em>: one trained model
+        that solves a whole family of control, transport and planning problems, trained on the problem's
+        own objective rather than on precomputed solutions.</p>
+      <nav class="jump" aria-label="On this page">
+        <a href="#proj-mfc">Mean-field control</a>
+        <a href="#proj-swarm">Spacecraft swarms</a>
+        <a href="#proj-geometry">Geometry</a>
+        <a href="#proj-fractals">2-nacci fractal</a>
+        <a href="#publications">Publications</a>
+        <a href="#talks">Talks</a>
+      </nav>
+    </section>
+
+    <!-- ===== Projects: one <article> each, newest first ===== -->
+    <article class="panel section project" id="proj-mfc" aria-labelledby="h-mfc">
+      <div class="meta"><span>2025 – 2026</span><a class="badge" href="#pub-mfc">Preprint [1]</a><a class="badge quiet" href="#talks">Talk, SIAM GLS 2026</a></div>
+      <h2 id="h-mfc">In-context operator learning for stochastic mean-field control</h2>
+      <p class="with">With Mo Zhou and Rongjie Lai</p>
+      <p>Stochastic mean-field control coordinates large populations of interacting agents under
+        uncertainty. Existing numerical and deep-learning methods solve one problem instance at a time
+        and must be re-optimized whenever the task changes. We instead treat stochastic mean-field control
+        as an operator-learning problem: learn the map from a task to its solution, once.</p>
+      <p>The main obstacle is the diffusion term in the controlled Fokker–Planck equation, which rules
+        out deterministic transport maps. Our model, the <em>Normalizing Flow Invertible Solution
+        Transformer</em> (NFIST), combines the probability-flow ODE with an invertible
+        normalizing-flow-based transformer. This recasts the dynamics as a deterministic continuity
+        equation and gives the score in closed form, through the exact inverse and log-determinant of the
+        flow, at <span class="math">𝒪(<i>d</i>)</span> cost per particle.</p>
+      <ul class="highlights">
+        <li>Mesh-free and self-supervised: trained end-to-end on the stochastic control objective, with no
+          precomputed numerical solutions.</li>
+        <li>In-context learning: a task prompt, given as compact distribution parameters or as a raw
+          particle cloud, conditions the transport map, so one pretrained operator solves unseen tasks in a
+          single forward pass.</li>
+        <li>The operator-learning formulation is proven consistent with task-by-task optimization.</li>
+        <li>Zero-shot results on stochastic optimal control, Schrödinger bridges, systemic-risk control and
+          obstacle-avoiding path planning.</li>
+      </ul>
+      <div class="links">
+        <a class="btn btn-sm" href="https://arxiv.org/abs/2608.18282"><svg aria-hidden="true"><use href="#i-out"/></svg>arXiv:2608.18282</a>
+        <a class="btn btn-sm" href="#pub-mfc"><svg aria-hidden="true"><use href="#i-hash"/></svg>Abstract &amp; BibTeX</a>
+      </div>
+    </article>
+
+    <article class="panel section project" id="proj-swarm" aria-labelledby="h-swarm">
+      <div class="meta"><span>2025 – 2026</span><a class="badge" href="#pub-swarm">Preprint [2]</a></div>
+      <h2 id="h-swarm">Neural operators for spacecraft-swarm trajectory planning</h2>
+      <p class="with">With Sidhdharth D. Sikka, Zehui Lu, Rongjie Lai and Shaoshuai Mou</p>
+      <p>Satellite constellations need orbital transfers that save fuel and avoid collisions. Classical
+        trajectory optimization scales poorly here, with both the number of spacecraft and the number of
+        obstacles, because every pair needs a safety constraint.</p>
+      <p>We train a permutation-equivariant neural operator that maps the initial states and targets of a
+        swarm, together with the obstacles, to collision-free, fuel-conserving trajectories. A batched
+        Gauss–Newton step then enforces the exact orbital dynamics and reduces fuel use further.</p>
+      <ul class="highlights">
+        <li>Self-supervised: trained without optimal trajectory labels.</li>
+        <li>Trained on 10 spacecraft, it generalizes zero-shot to swarms of 1,000 spacecraft and 11,000
+          obstacles.</li>
+        <li>Matches the accuracy of a per-agent optimal control solver while keeping collision
+          avoidance.</li>
+      </ul>
+      <div class="links">
+        <a class="btn btn-sm" href="https://arxiv.org/abs/2608.00320"><svg aria-hidden="true"><use href="#i-out"/></svg>arXiv:2608.00320</a>
+        <a class="btn btn-sm" href="#pub-swarm"><svg aria-hidden="true"><use href="#i-hash"/></svg>Abstract &amp; BibTeX</a>
+      </div>
+    </article>
+
+    <article class="panel section project" id="proj-geometry" aria-labelledby="h-geometry">
+      <div class="meta"><span>May 2024 – present</span><span class="badge quiet">Ongoing</span></div>
+      <h2 id="h-geometry">Diffusion models for geometry problems</h2>
+      <p>Combining diffusion models with classical optimization to recover point configurations from
+        incomplete or noisy data, a question in Euclidean distance geometry. This work is in progress.</p>
+    </article>
+
+    <article class="panel section project" id="proj-fractals" aria-labelledby="h-fractals">
+      <div class="meta"><span>Summers 2019 – 2021</span><span class="badge quiet">Undergraduate research, McDaniel College</span></div>
+      <h2 id="h-fractals">Analysis on the 2-nacci fractal</h2>
+      <figure class="figure">
+        <svg viewBox="-6 -6 612 341" role="img" aria-label="The 2-nacci word fractal at the critical angle"><path d="M74 315L75 321 71 324 72 329M73 328L69 325 64 328 60 324 62 319 58 315 59 310M61 311L56 314 52 311 47 313 48 319 43 322 45 327M46 326L42 323 37 326 33 322M37 326L33 322 35 317 30 313M30 315L35 315 37 310 43 310 45 305 40 301 42 296M44 297L39 300 34 297 30 299 25 296 27 291 23 287M22 289L28 289 30 284 35 284 37 289 43 289 45 294M43 294L45 289 50 289 52 284 48 280 50 275 45 271M45 273L50 273 52 268 58 268 59 273 65 273 67 278M65 278L67 273 72 273 74 268M72 273L74 268 70 264 72 259M73 260L69 263 64 260 59 263 55 259 57 254 53 250M52 252L58 252 59 247 65 247 67 242 63 238 64 233M66 234L61 237 57 234 52 236 53 242 48 245 50 250M51 249L47 246 42 249 38 245 40 240 35 236 37 231M39 232L34 235 30 232 25 235 26 240 21 243 22 248M24 248L20 244 15 247 11 243M15 247L11 243 12 238 8 235M7 236L13 236 15 231 20 231 22 226 18 222 20 217M21 218L17 221 12 218 7 221 3 217 5 212 1 208M0 210L6 210 7 205 13 205M7 221L3 217 5 212 1 208M0 210L6 210 7 205 13 205 15 210 20 210 22 215M20 215L22 210 28 210 30 205 25 201 27 196 23 193M22 194L28 194 30 189 35 189M30 189L35 189 37 194 43 194M42 193L38 196 40 201 35 205 37 210 43 210 45 215M43 215L45 210 50 210 52 205 58 205 59 210 65 210M64 208L60 212 62 217 58 221 59 226 65 226 67 231M65 231L67 226 72 226 74 221 70 217 72 212 67 208M67 210L72 210 74 205 80 205 82 210 87 210 89 215M87 215L89 210 95 210 97 205M95 210L97 205 92 201 94 196M96 197L91 200 86 197 82 200 77 196 79 191 75 187M74 189L80 189 82 184 87 184 89 179 85 175 87 170M88 171L83 174 79 170 74 173 70 170 72 165 67 161M67 163L72 163 74 158 80 158 82 163 87 163 89 168M87 168L89 163 95 163 97 158 92 154 94 149 90 145M89 147L95 147 97 142 102 142M97 142L102 142 104 147 110 147M109 145L105 149 107 154 102 158 104 163 110 163 111 168M110 168L111 163 117 163 119 158 124 158 126 163 132 163M131 161L127 165 129 170 124 173 120 170 115 174 111 171M112 170L114 175 110 179 111 184 117 184 119 189 124 189M124 187L120 191 121 196 117 200 112 197 108 200 103 197M105 196L107 201 102 205 104 210M102 205L104 210 110 210 111 215M110 215L111 210 117 210 119 205 124 205 126 210 132 210M131 208L127 212 129 217 124 221 126 226 132 226 134 231M132 231L134 226 139 226 141 221 137 217 139 212 134 208M134 210L139 210 141 205 147 205 149 210 154 210 156 215M154 215L156 210 162 210 163 205 159 201 161 196 157 193M156 194L162 194 163 189 169 189M163 189L169 189 171 194 176 194M176 193L172 196 173 201 169 205 171 210 176 210 178 215M176 215L178 210 184 210 186 205 191 205 193 210 199 210M198 208L194 212 196 217 191 221 187 218 182 221 178 218M179 217L181 222 176 226 178 231 184 231 186 236 191 236M191 235L186 238 188 243 184 247 179 244 175 248 170 245M172 243L173 249 169 252 171 257M169 252L171 257 176 257 178 263M176 263L178 257 184 257 186 252 191 252 193 257 199 257M198 256L194 259 196 264 191 268 193 273 199 273 201 278M199 278L201 273 206 273 208 268M191 268L193 273 199 273 201 278M199 278L201 273 206 273 208 268 204 264 206 259 201 256M201 257L206 257 208 252 214 252 215 257 221 257 223 263M221 263L223 257 228 257 230 252M228 257L230 252 226 249 228 243M229 245L225 248 220 244 215 247 211 243 213 238 209 235M208 236L214 236 215 231 221 231 223 226 219 222 220 217M222 218L217 221 213 218 208 221 204 217 206 212 201 208M201 210L206 210 208 205 214 205 215 210 221 210 223 215M221 215L223 210 228 210 230 205 226 201 228 196 224 193M223 194L228 194 230 189 236 189M230 189L236 189 238 194 243 194M243 193L238 196 240 201 236 205 238 210 243 210 245 215M243 215L245 210 251 210 253 205 258 205 260 210 266 210M265 208L261 212 263 217 258 221 260 226 266 226 267 231M266 231L267 226 273 226 275 221 271 217 272 212 268 208M267 210L273 210 275 205 280 205 282 210 288 210 290 215M288 215L290 210 295 210 297 205M295 210L297 205 293 201 295 196M296 197L291 200 287 197 282 200 278 196 280 191 276 187M275 189L280 189 282 184 288 184 290 179 285 175 287 170M289 171L284 174 280 170 275 173 276 179 271 182 273 187M274 186L270 183 265 186 261 182 263 177 258 173 260 168M262 169L257 172 252 169 248 172 249 177 244 180 245 185M247 184L243 181 238 184 233 180M238 184L233 180 235 175 231 172M230 173L236 173 238 168 243 168 245 163 241 159 243 154M244 155L239 158 235 155 230 158 226 154 228 149 224 145M223 147L228 147 230 142 236 142 238 147 243 147 245 152M243 152L245 147 251 147 253 142 248 138 250 133 246 130M245 131L251 131 253 126 258 126 260 131 266 131 267 137M266 137L267 131 273 131 275 126M273 131L275 126 271 123 272 117M274 119L269 121 265 118 260 121 256 117 258 112 253 109M253 110L258 110 260 105 266 105 267 100 263 96 265 91M266 92L262 95 257 92 253 95 254 100 249 103 250 108M252 107L247 104 243 107 238 103 240 98 236 95 238 89M239 90L234 93 230 90 225 93 227 98 222 101 223 107M225 106L220 102 215 105 211 102M215 105L211 102 213 96 209 93M208 95L214 95 215 89 221 89 223 84 219 81 220 75M222 76L217 79 213 76 208 79 204 75 206 70 201 67M201 68L206 68 208 63 214 63M208 79L204 75 206 70 201 67M201 68L206 68 208 63 214 63 215 68 221 68 223 74M221 74L223 68 228 68 230 63 226 60 228 54 224 51M223 53L228 53 230 47 236 47M230 47L236 47 238 53 243 53M243 51L238 54 240 60 236 63 238 68 243 68 245 74M243 74L245 68 251 68 253 63 258 63 260 68 266 68M265 67L261 70 263 75 258 79 260 84 266 84 267 89M266 89L267 84 273 84 275 79 271 75 272 70 268 67M267 68L273 68 275 63 280 63 282 68 288 68 290 74M288 74L290 68 295 68 297 63M295 68L297 63 293 60 295 54M296 55L291 58 287 55 282 58 278 54 280 49 276 46M275 47L280 47 282 42 288 42 290 37 285 33 287 28M289 29L284 32 280 29 275 32 271 28 272 23 268 19M267 21L273 21 275 16 280 16 282 21 288 21 290 26M288 26L290 21 295 21 297 16 293 12 295 7 290 4M290 5L295 5 297 0 303 0M297 0L303 0 305 5 310 5M310 4L305 7 307 12 303 16 305 21 310 21 312 26M310 26L312 21 318 21 320 16 325 16 327 21 333 21M332 19L328 23 329 28 325 32M275 32L271 28 272 23 268 19M267 21L273 21 275 16 280 16 282 21 288 21 290 26M288 26L290 21 295 21 297 16 293 12 295 7 290 4M290 5L295 5 297 0 303 0M297 0L303 0 305 5 310 5M310 4L305 7 307 12 303 16 305 21 310 21 312 26M310 26L312 21 318 21 320 16 325 16 327 21 333 21M332 19L328 23 329 28 325 32 320 29 316 32 311 29M313 28L315 33 310 37 312 42 318 42 320 47 325 47M324 46L320 49 322 54 318 58 313 55 309 58 304 55M305 54L307 60 303 63 305 68M303 63L305 68 310 68 312 74M310 74L312 68 318 68 320 63 325 63 327 68 333 68M332 67L328 70 329 75 325 79 327 84 333 84 334 89M333 89L334 84 340 84 342 79 337 75 339 70 335 67M334 68L340 68 342 63 347 63 349 68 355 68 357 74M355 74L357 68 362 68 364 63 360 60 362 54 357 51M357 53L362 53 364 47 370 47M364 47L370 47 372 53 377 53M376 51L372 54 374 60 370 63 372 68 377 68 379 74M377 74L379 68 385 68 386 63 392 63 394 68 399 68M399 67L394 70 396 75 392 79M386 63L392 63 394 68 399 68M399 67L394 70 396 75 392 79 387 76 383 79 378 76M380 75L381 81 377 84 379 89 385 89 386 95 392 95M391 93L387 96 389 102 385 105M389 102L385 105 380 102 375 106M377 107L378 101 373 98 375 93 370 90 366 93 361 90M362 89L364 95 360 98 362 103 357 107 353 104 348 107M350 108L351 103 346 100 347 95 343 92 338 95 334 92M335 91L337 96 333 100 334 105 340 105 342 110 347 110M347 109L342 112 344 117 340 121 335 118 331 121 326 119M328 117L329 123 325 126 327 131M325 126L327 131 333 131 334 137M333 137L334 131 340 131 342 126 347 126 349 131 355 131M354 130L350 133 352 138 347 142 349 147 355 147 357 152M355 152L357 147 362 147 364 142 370 142 372 147 377 147M376 145L372 149 374 154 370 158 365 155 361 158 356 155M357 154L359 159 355 163 357 168 362 168 364 173 370 173M369 172L365 175 367 180 362 184M367 180L362 184 357 181 353 184M355 185L356 180 351 177 352 172 348 169 343 172 338 169M340 168L342 173 337 177 339 182 335 186 330 183 326 186M327 187L329 182 324 179 325 173 320 170 316 174 311 171M313 170L315 175 310 179 312 184 318 184 320 189 325 189M324 187L320 191 322 196 318 200 313 197 309 200 304 197M305 196L307 201 303 205 305 210M303 205L305 210 310 210 312 215M310 215L312 210 318 210 320 205 325 205 327 210 333 210M332 208L328 212 329 217 325 221 327 226 333 226 334 231M333 231L334 226 340 226 342 221 337 217 339 212 335 208M334 210L340 210 342 205 347 205 349 210 355 210 357 215M355 215L357 210 362 210 364 205 360 201 362 196 357 193M357 194L362 194 364 189 370 189M364 189L370 189 372 194 377 194M376 193L372 196 374 201 370 205 372 210 377 210 379 215M377 215L379 210 385 210 386 205 392 205 394 210 399 210M399 208L394 212 396 217 392 221 387 218 383 221 378 218M380 217L381 222 377 226 379 231 385 231 386 236 392 236M391 235L387 238 389 243 385 247 380 244 375 248 371 245M372 243L374 249 370 252 372 257M370 252L372 257 377 257 379 263M377 263L379 257 385 257 386 252 392 252 394 257 399 257M399 256L394 259 396 264 392 268 394 273 399 273 401 278M399 278L401 273 407 273 409 268M392 268L394 273 399 273 401 278M399 278L401 273 407 273 409 268 404 264 406 259 402 256M401 257L407 257 409 252 414 252 416 257 422 257 424 263M422 263L424 257 429 257 431 252M429 257L431 252 427 249 428 243M430 245L425 248 421 244 416 247 412 243 414 238 409 235M409 236L414 236 416 231 422 231 424 226 419 222 421 217M422 218L418 221 413 218 409 221 404 217 406 212 402 208M401 210L407 210 409 205 414 205 416 210 422 210 424 215M422 215L424 210 429 210 431 205 427 201 428 196 424 193M424 194L429 194 431 189 437 189M431 189L437 189 438 194 444 194M443 193L439 196 441 201 437 205 438 210 444 210 446 215M444 215L446 210 451 210 453 205 459 205 461 210 466 210M466 208L461 212 463 217 459 221 461 226 466 226 468 231M466 231L468 226 474 226 476 221 471 217 473 212 469 208M468 210L474 210 476 205 481 205 483 210 489 210 490 215M489 215L490 210 496 210 498 205M496 210L498 205 493 201 495 196M497 197L492 200 488 197 483 200 479 196 480 191 476 187M476 189L481 189 483 184 489 184 490 179 486 175 488 170M489 171L485 174 480 170 476 173 471 170 473 165 469 161M468 163L474 163 476 158 481 158 483 163 489 163 490 168M489 168L490 163 496 163 498 158 493 154 495 149 491 145M490 147L496 147 498 142 503 142M498 142L503 142 505 147 511 147M510 145L506 149 508 154 503 158 505 163 511 163 513 168M511 168L513 163 518 163 520 158 526 158 528 163 533 163M533 161L528 165 530 170 526 173 521 170 517 174 512 171M513 170L515 175 511 179 513 184 518 184 520 189 526 189M525 187L521 191 523 196 518 200 514 197 509 200 504 197M506 196L508 201 503 205 505 210M503 205L505 210 511 210 513 215M511 215L513 210 518 210 520 205 526 205 528 210 533 210M533 208L528 212 530 217 526 221 528 226 533 226 535 231M533 231L535 226 541 226 542 221 538 217 540 212 536 208M535 210L541 210 542 205 548 205 550 210 555 210 557 215M555 215L557 210 563 210 565 205 560 201 562 196 558 193M557 194L563 194 565 189 570 189M565 189L570 189 572 194 578 194M577 193L573 196 575 201 570 205 572 210 578 210 580 215M578 215L580 210 585 210 587 205 593 205 594 210 600 210M599 208L595 212 597 217 593 221M587 205L593 205 594 210 600 210M599 208L595 212 597 217 593 221 588 218 583 221 579 218M580 217L582 222 578 226 580 231 585 231 587 236 593 236M592 235L588 238 589 243 585 247M589 243L585 247 580 244 576 248M578 248L579 243 574 240 575 235 570 232 566 235 561 232M563 231L565 236 560 240 562 245 558 249 553 246 549 249M550 250L552 245 547 242 548 236 543 234 539 237 534 234M536 233L537 238 533 242 535 247 541 247 542 252 548 252M547 250L543 254 545 259 541 263 536 260 531 263 527 260M528 259L530 264 526 268 528 273M526 268L528 273 533 273 535 278M533 278L535 273 541 273 542 268 548 268 550 273 555 273M555 271L550 275 552 280 548 284 550 289 555 289 557 294M555 294L557 289 563 289 565 284 570 284 572 289 578 289M577 287L573 291 575 296 570 299 566 297 561 300 556 297M558 296L560 301 555 305 557 310 563 310 565 315 570 315M570 313L565 317 567 322 563 326M567 322L563 326 558 323 554 326M555 327L557 322 552 319 553 313 548 311 544 314 539 311M541 310L542 315 538 319 540 324 536 328 531 325 527 328M528 329L529 324 525 321 526 315"/></svg>
+        <figcaption>The 2-nacci word fractal at the critical angle α = arccos(1/3): level 4 of its
+          iterated function system.</figcaption>
+      </figure>
+      <p>The Fibonacci word fractal is drawn from the Fibonacci words, each the concatenation of the
+        two before it (f<sub>n</sub> = f<sub>n−1</sub>f<sub>n−2</sub>), by a turning rule with a turning
+        angle α. I worked on a variation, the 2-nacci word fractal, built from the words
+        f<sub>n</sub> = f<sub>n−1</sub>f<sub>n−1</sub>f<sub>n−2</sub>. It is also the attractor of an
+        iterated function system of six similarities with ratio 1/c; at the critical angle
+        α = arccos(1/3), c = 3.</p>
+      <p>That system overlaps itself (it fails the open set condition), so with Benjamin Steinhurst I
+        built the fractal instead as a projective limit of graphs, and showed that the limit is
+        homeomorphic to the attractor. Its finitely ramified cell structure supports a Laplacian: we
+        assembled the Laplacian matrices of four graph approximations, computed their eigenvalues and
+        eigenvectors, and estimated the spectral dimension from the eigenvalue counting function.</p>
+      <p>I presented the projective-limit construction at MAA MathFest 2019, and the analysis at the
+        critical angle in a poster at the Joint Mathematics Meetings in 2022.</p>
+    </article>
+
+    <!-- ===== Publications: copy one <li class="pub"> per paper; numbers follow the order ===== -->
+    <section class="panel section" id="publications" aria-labelledby="h-pubs">
+      <h2 class="label" id="h-pubs">Publications &amp; Preprints</h2>
+      <ol>
+        <li class="pub" id="pub-mfc">
+          <span class="pub-num" aria-hidden="true">[1]</span>
+          <div>
+            <a class="pub-title" href="https://arxiv.org/abs/2608.18282">Self-supervised In-context Operator Learning for Stochastic Mean-Field Control</a>
+            <p class="pub-authors"><b class="me">Suyi Gao</b>, Mo Zhou, Rongjie Lai</p>
+            <p class="pub-venue"><em>arXiv preprint</em> arXiv:2608.18282, 2026</p>
+            <div class="pub-actions">
+              <a class="btn btn-sm" href="https://arxiv.org/abs/2608.18282"><svg aria-hidden="true"><use href="#i-out"/></svg>arXiv</a>
+              <a class="btn btn-sm" href="https://arxiv.org/pdf/2608.18282"><svg aria-hidden="true"><use href="#i-file"/></svg>PDF</a>
+              <button type="button" class="btn btn-sm" data-toggle aria-expanded="false" aria-controls="abs-mfc">Abstract<svg class="chev" aria-hidden="true"><use href="#i-down"/></svg></button>
+              <button type="button" class="btn btn-sm" data-toggle aria-expanded="false" aria-controls="bib-mfc">BibTeX<svg class="chev" aria-hidden="true"><use href="#i-down"/></svg></button>
+            </div>
+            <div class="pub-panel abstract" id="abs-mfc">
+              <p>Stochastic mean-field control (MFC) provides a fundamental framework for coordinating
+                large populations of interacting agents under uncertainty, with a wide range of
+                applications. Existing numerical and deep-learning methods solve one MFC problem instance
+                at a time and must be re-optimized whenever the task changes. In this work, we formulate
+                stochastic MFC as an operator-learning problem and develop, to the best of our knowledge,
+                the first mesh-free, self-supervised neural operator for stochastic MFC. The main
+                challenge is that the diffusion term in the controlled Fokker–Planck equation precludes
+                deterministic transport-map representations. We address this challenge by combining the
+                probability-flow ODE with an invertible normalizing-flow-based transformer, which recasts
+                the dynamics as a deterministic continuity equation and enables closed-form score
+                evaluation through the exact inverse and analytical log-determinant of the normalizing
+                flow, with <span class="math">𝒪(<i>d</i>)</span> cost per particle for networks of fixed
+                size. Through transformer-based in-context learning, task prompts, represented by compact
+                distribution parameters or raw particle clouds, condition the transport map, enabling a
+                single pretrained operator to solve unseen tasks in one forward pass. The resulting
+                <em>Normalizing Flow Invertible Solution Transformer</em> (NFIST) is trained end-to-end by
+                minimizing the stochastic control objective directly, requiring no precomputed numerical
+                solutions for training. We further prove the consistency of the proposed operator-learning
+                formulation with task-by-task optimization. Numerical experiments on stochastic optimal
+                control, Schrödinger bridge, systemic-risk control, and obstacle-avoiding path planning
+                demonstrate effective zero-shot generalization while substantially reducing the
+                computational cost of solving large families of stochastic MFC problems.</p>
+            </div>
+            <div class="pub-panel bibtex" id="bib-mfc">
+              <button type="button" class="btn btn-sm btn-quiet copy" data-copy="bibtex-mfc"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy</button>
+<pre id="bibtex-mfc">@misc{gao2026selfsupervised,
+  title         = {Self-supervised In-context Operator Learning for
+                   Stochastic Mean-Field Control},
+  author        = {Gao, Suyi and Zhou, Mo and Lai, Rongjie},
+  year          = {2026},
+  eprint        = {2608.18282},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2608.18282}
+}</pre>
+            </div>
+          </div>
+        </li>
+
+        <li class="pub" id="pub-swarm">
+          <span class="pub-num" aria-hidden="true">[2]</span>
+          <div>
+            <a class="pub-title" href="https://arxiv.org/abs/2608.00320">Neural Operator Learning for Collision-Aware Trajectory Planning of Spacecraft Swarms</a>
+            <p class="pub-authors">Sidhdharth D. Sikka, <b class="me">Suyi Gao</b>, Zehui Lu, Rongjie Lai, Shaoshuai Mou</p>
+            <p class="pub-venue"><em>arXiv preprint</em> arXiv:2608.00320, 2026</p>
+            <div class="pub-actions">
+              <a class="btn btn-sm" href="https://arxiv.org/abs/2608.00320"><svg aria-hidden="true"><use href="#i-out"/></svg>arXiv</a>
+              <a class="btn btn-sm" href="https://arxiv.org/pdf/2608.00320"><svg aria-hidden="true"><use href="#i-file"/></svg>PDF</a>
+              <button type="button" class="btn btn-sm" data-toggle aria-expanded="false" aria-controls="abs-swarm">Abstract<svg class="chev" aria-hidden="true"><use href="#i-down"/></svg></button>
+              <button type="button" class="btn btn-sm" data-toggle aria-expanded="false" aria-controls="bib-swarm">BibTeX<svg class="chev" aria-hidden="true"><use href="#i-down"/></svg></button>
+            </div>
+            <div class="pub-panel abstract" id="abs-swarm">
+              <p>Satellite constellations require orbital transfers that are both fuel efficient and
+                collision avoidant. Yet, the computational cost of optimization methods traditionally used
+                to plan their trajectories scales poorly with both the number of satellites as well as the
+                number of obstacles to avoid, due to the pairwise safety constraints. In this work, we
+                introduce a permutation-equivariant neural operator for trajectory planning of spacecraft
+                swarms. This neural operator maps distributions of spacecraft initial states, target
+                states, and obstacle initial states to trajectories which avoid collision and conserve
+                fuel. This neural operator output is then paired with a batched Gauss-Newton finish to
+                enforce exact orbital dynamics, and further reduce fuel use. The operator is
+                self-supervised, trained without optimal trajectory labels. When trained on ten
+                spacecraft, the proposed method generalized zero-shot to swarms of 1,000 spacecraft and
+                11,000 obstacles. The generated trajectories matched a per-agent optimal control solver's
+                accuracy while retaining collision avoidance. Operator learning grounded in physics may
+                offer a fast, scalable alternative to trajectory optimization in the increasingly crowded
+                orbits of the future.</p>
+            </div>
+            <div class="pub-panel bibtex" id="bib-swarm">
+              <button type="button" class="btn btn-sm btn-quiet copy" data-copy="bibtex-swarm"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy</button>
+<pre id="bibtex-swarm">@misc{sikka2026neural,
+  title         = {Neural Operator Learning for Collision-Aware
+                   Trajectory Planning of Spacecraft Swarms},
+  author        = {Sikka, Sidhdharth D. and Gao, Suyi and Lu, Zehui
+                   and Lai, Rongjie and Mou, Shaoshuai},
+  year          = {2026},
+  eprint        = {2608.00320},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2608.00320}
+}</pre>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ===== Talks & posters ===== -->
+    <section class="panel section" id="talks" aria-labelledby="h-talks">
+      <h2 class="label" id="h-talks">Talks &amp; Posters</h2>
+      <ul class="entries">
+        <li class="entry">
+          <span class="entry-title"><span class="kind">Talk</span>Self-supervised In-context Operator Learning for Stochastic Mean-Field Control</span>
+          <span class="entry-sub">Minisymposium, SIAM Great Lakes Section Annual Meeting · Purdue University</span>
+          <span class="entry-when">Sep 2026</span>
+        </li>
+        <li class="entry">
+          <span class="entry-title"><span class="kind">Poster</span>Laplacian on the 2-nacci Fractal at the Critical Angle</span>
+          <span class="entry-sub">Joint Mathematics Meetings (JMM 2022)</span>
+          <span class="entry-when">Jan 2022</span>
+        </li>
+        <li class="entry">
+          <span class="entry-title"><span class="kind">Talk</span>A Projective Limit Construction of the 2-nacci Fractal</span>
+          <span class="entry-sub">MAA MathFest 2019 · Cincinnati, OH</span>
+          <span class="entry-when">Aug 2019</span>
+        </li>
+      </ul>
+    </section>
+
+    <footer class="foot">
+      <span>© 2026 Suyi (Stanley) Gao</span>
+      <span>Last updated October 2026</span>
+    </footer>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><i class="toast-dot" aria-hidden="true"></i><span id="toastText"></span></div>
+</body>
+</html>
