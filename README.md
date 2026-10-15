@@ -1,6 +1,6 @@
 # gaosu2718.github.io
 
-Personal academic homepage of Suyi (Stanley) Gao, served by GitHub Pages at
+Personal academic homepage of Suyi Gao (Stanley), served by GitHub Pages at
 <https://gaosu2718.github.io/>.
 
 Plain HTML and CSS with two small scripts: no build step, no framework, no external requests. The
@@ -40,9 +40,14 @@ Below that width, a **top header** takes over. On tablets it shows the page link
 phones they sit behind a menu button, in a drop-down that also holds the display settings. The
 profile then shows as a card on the home page only.
 
-A **demo page** (`demos/pivot-cubes/`) has no left bar, so the game gets the whole width
-(`<div class="page wide">`). From 1000px, the breadcrumbs above the game lead back to the site, and
-the game's own panel sets the theme. Below 1000px it has the same header as every other page.
+A **demo page** (`demos/pivot-cubes/`) has no left bar (`<div class="page wide">`). The game spans
+the window edge to edge and reaches its bottom, as in Full screen. From 1000px, the breadcrumbs above
+the game lead back to the site, and the game's own panel sets the theme. Below 1000px it has the same
+header as every other page.
+
+On a **computer** (any device whose main pointer isn't a touch screen) the game always shows its
+desktop layout. In a window narrower than 1000px, `demo.js` draws it 1000px wide and scales it down.
+On a phone or tablet narrower than that, the game shows its one-column layout instead.
 
 The bar and the header are repeated in each file. Only the `../` prefix of the links and the
 `aria-current="page"` marker change. **A new page needs a link in every file, in all three lists:**

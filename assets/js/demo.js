@@ -4,9 +4,13 @@
  *   the game reads at load.
  * - A theme or colour picked in the site header goes to the game's own controls; one picked in the
  *   game's panel (or with its T key) comes back to the site, so header and game always match.
- * - From 1000px of frame width the game shows its three columns and fits the window, so the frame
- *   is as tall as the window below the header (style.css).  Narrower, the game is one long column:
- *   the frame takes the game's full height, so the page scrolls as one, with no scroll box inside.
+ * - The frame spans the window.  From 1000px of frame width the game shows its three columns and
+ *   fits the window, so the frame reaches the bottom of the window (style.css).
+ * - On a computer (any device whose main pointer is not a touch screen) the game always shows its
+ *   three columns, as in Full screen: in a window too narrow for them, the frame is drawn 1000px
+ *   wide and scaled down.
+ * - On a phone or tablet narrower than that, the game is one long column: the frame takes the
+ *   game's full height, so the page scrolls as one, with no scroll box inside.
  *
  * - data-frame-css on the frame names a stylesheet (the site's own) to add inside the game, for
  *   touches that only matter when it runs here.
@@ -20,6 +24,9 @@
   if (!frame || !window.Site) return;
 
   var WIDE = 1000;   // the game's breakpoint for its three-column layout (its style.css)
+  var wrap = frame.parentNode;
+  // phones and tablets: a touch screen is the main pointer.  Anything else counts as a computer.
+  var touch = window.matchMedia ? window.matchMedia('(pointer: coarse)') : null;
   // Colour themes the game knows (data-palettes, its default first); a site theme the game lacks
   // shows as the game's default.
   var GAME_PALETTES = (frame.getAttribute('data-palettes') || 'mint').split(/\s+/);
@@ -49,19 +56,30 @@
   }
 
   function fit() {
-    if (!doc) { frame.style.height = ''; return; }
-    if (frame.clientWidth < WIDE) {
+    var width = wrap.clientWidth;
+    // a computer with less than WIDE: draw the three columns at WIDE and scale them down to fit
+    var scale = width < WIDE && !(touch && touch.matches) ? width / WIDE : 1;
+    frame.style.width = scale < 1 ? WIDE + 'px' : '';
+    frame.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
+    if (scale === 1 && width < WIDE) {
       // one long column: the frame takes the game's whole height
-      var h = Math.ceil(doc.documentElement.getBoundingClientRect().height);
-      if (h > 0 && Math.abs(frame.offsetHeight - h) > 1) frame.style.height = h + 'px';
-      return;
+      if (doc) {
+        var h = Math.ceil(doc.documentElement.getBoundingClientRect().height);
+        if (h > 0 && Math.abs(frame.offsetHeight - h) > 1) frame.style.height = h + 'px';
+      } else {
+        frame.style.height = '';
+      }
+    } else {
+      // three columns: as tall as the window allows (CSS), but no taller than the game when the
+      // game is limited by the width instead.  The game sizes its board from the frame's height, so
+      // trimming the frame to the game leaves the board as it was.  (Heights in the game's pixels.)
+      frame.style.height = '';
+      var room = frame.offsetHeight / scale, used = doc ? contentHeight() : 0;
+      if (used > 0 && used < room - 2) room = used + 2;
+      if (scale < 1 || room < frame.offsetHeight - 1) frame.style.height = room + 'px';
     }
-    // three columns: as tall as the window allows (CSS), but no taller than the game when the
-    // game is limited by the width instead.  The game sizes its board from the frame's height, so
-    // trimming the frame to the game leaves the board as it was.
-    frame.style.height = '';
-    var room = frame.offsetHeight, used = contentHeight();
-    if (used > 0 && used < room - 2) frame.style.height = (used + 2) + 'px';
+    // a scaled frame still takes its unscaled size in the page: the box around it takes the drawn one
+    wrap.style.height = scale < 1 ? Math.ceil(frame.offsetHeight * scale) + 'px' : '';
   }
 
   /* ---------- theme: game -> site ---------- */
@@ -139,8 +157,10 @@
 
   frame.addEventListener('load', connect);
   window.addEventListener('resize', fit);
+  if (touch && touch.addEventListener) touch.addEventListener('change', fit);
   Site.onChange(toGame);
 
+  fit();
   frame.src = frame.getAttribute('data-src') + themeHash();
   addFrameCssEarly(600);   // about ten seconds of frames
 })();

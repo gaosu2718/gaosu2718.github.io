@@ -1,4 +1,4 @@
-/* Suyi (Stanley) Gao: academic homepage.
+/* Suyi Gao (Stanley): academic homepage.
  * The look is borrowed from Pivot Cubes (demos/pivot-cubes/play/style.css): the same paper-and-panel
  * tokens, the same colour themes (Mint is the default), and the same controls (segmented switch,
  * swatches, buttons, toast).  Light/dark (data-theme) and the colour theme (data-palette) are
@@ -140,7 +140,6 @@
   --gap: 16px;
   --side-w: 296px;
   --wide: 1140px;       /* the page: left bar and main column */
-  --wider: 1640px;      /* a demo page: no left bar, so the game gets room for its own three columns */
   --header-h: 60px;     /* the top header, shown only below 1000px */
   --radius: 14px;
   --radius-sm: 9px;
@@ -506,8 +505,7 @@ html:not(.js) .sh-tools { display: none; }
     align-items: start;
     max-width: var(--wide);
   }
-  /* a demo page: no left bar, the game takes the whole width */
-  .page.wide { grid-template-columns: minmax(0, 1fr); max-width: var(--wider); }
+  .page.wide { grid-template-columns: minmax(0, 1fr); }   /* a demo page: no left bar */
   .side {
     position: sticky;
     top: calc(var(--header-h) + var(--pad));
@@ -1044,20 +1042,26 @@ html:not(.js) [data-toggle], html:not(.js) [data-copy] { display: none; }
 .demo-bar .crumbs { margin: 0; font-size: 13.5px; }
 .demo-bar .crumbs strong { color: var(--text); font-weight: 600; }
 .demo-bar .btn-sm { flex: none; }
-/* The frame is as tall as the window allows when the game has room for its three columns (a frame
- * at least 1000px wide, as in the game); demo.js sizes it to the game's height when narrower. */
+/* The game spans the window, as it does on its own (Full screen): the page is as wide as the window,
+ * and the frame runs edge to edge (the game has its own margins).  The text below it keeps the
+ * usual reading width. */
+.page.wide { max-width: none; }
+.page.wide .demo-about, .page.wide .foot { width: 100%; max-width: calc(var(--wide) - 2 * var(--pad)); justify-self: center; }
+.game-wrap { margin: 0 calc(-1 * var(--pad)); overflow: hidden; }
+/* The frame reaches the bottom of the window when the game shows its three columns (a frame at least
+ * 1000px wide, as in the game).  demo.js trims it to the game, sizes it to the game's whole height
+ * when the game is one column (phones, tablets), and on a computer keeps the three columns in any
+ * window: narrower than 1000px, the frame is drawn 1000px wide and scaled down to fit. */
 .game-frame {
   display: block;
   width: 100%;
-  height: max(620px, calc(var(--vh) - var(--header-h) - 2 * var(--pad) - 40px - var(--gap)));
+  height: max(620px, calc(var(--vh) - var(--header-h) - var(--pad) - 40px - var(--gap)));
   border: 0;
+  transform-origin: 0 0;
 }
 .noscript { margin: 16px 4px; color: var(--text-dim); }
 .demo-about p { font-size: 15.5px; line-height: 1.65; }
 .demo-about .note-line { margin-top: 14px; color: var(--text-dim); font-size: 14.5px; }
-@media (max-width: 999.98px) {
-  .game-wrap { margin: 0 calc(-1 * var(--pad)); }   /* edge to edge: the game has its own margins */
-}
 @media (max-width: 759.98px) {
   .demo-bar .btn-sm { display: none; }   /* the frame already spans the screen */
 }
